@@ -1,2 +1,4 @@
 redis:
-  address: "redis-server:6379"
+  address: "localhost:6379"
+
+address: "localhost:8080"

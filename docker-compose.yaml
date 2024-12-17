@@ -1,28 +1,28 @@
 version: '3.8'
 
 services:
-  backend-service:
-    build:
-      context: .
-      dockerfile: /build/dev/dockerfile
-    container_name: backend-service
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
-      - redis
-      - rabbitmq
-    environment:
-      MYSQL_HOST: mysql-server
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: mydatabase
-      REDIS_HOST: redis-server
-      REDIS_PORT: 6379
-      RABBITMQ_HOST: rabbitmq-management
-      RABBITMQ_PORT: 5672
-      RABBITMQ_USER: user
-      RABBITMQ_PASSWORD: password
+  # backend-service:
+  #   build:
+  #     context: .
+  #     dockerfile: /build/dev/dockerfile
+  #   container_name: backend-service
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mysql
+  #     - redis
+  #     - rabbitmq
+  #   environment:
+  #     MYSQL_HOST: mysql-server
+  #     MYSQL_USER: user
+  #     MYSQL_PASSWORD: password
+  #     MYSQL_DATABASE: mydatabase
+  #     REDIS_HOST: redis-server
+  #     REDIS_PORT: 6379
+  #     RABBITMQ_HOST: rabbitmq-management
+  #     RABBITMQ_PORT: 5672
+  #     RABBITMQ_USER: user
+  #     RABBITMQ_PASSWORD: password
 
   mysql:
     image: mysql:8.0
