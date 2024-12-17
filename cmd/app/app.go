@@ -26,8 +26,9 @@ type App struct {
 func NewApp(ctx context.Context) (*App, error) {
 	// Initialize Viper Config
 	viperConfig := viper.New()
-	viperConfig.SetConfigName("config") // Use your config file name
-	viperConfig.AddConfigPath(".")
+	viperConfig.SetConfigName("config")   // Only "config", no path, no extension
+	viperConfig.SetConfigType("yaml")     // Specify type explicitly, optional if filename is correct
+	viperConfig.AddConfigPath("./config") // Path to the directory containing the file
 	if err := viperConfig.ReadInConfig(); err != nil {
 		return nil, errors.New("error reading config file: " + err.Error())
 	}
@@ -40,9 +41,8 @@ func NewApp(ctx context.Context) (*App, error) {
 
 	// Initialize Redis Client
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     viperConfig.GetString("redis.address"), // e.g., "localhost:6379"
-		Password: "",                                     // No password by default
-		DB:       0,                                      // Default DB
+		Addr: viperConfig.GetString("redis.address"),
+		DB:   0,
 	})
 
 	// Check Redis Connection with Context

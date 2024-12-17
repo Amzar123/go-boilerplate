@@ -13,13 +13,13 @@ services:
       - redis
       - rabbitmq
     environment:
-      MYSQL_HOST: mysql
+      MYSQL_HOST: mysql-server
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: mydatabase
-      REDIS_HOST: redis
+      REDIS_HOST: redis-server
       REDIS_PORT: 6379
-      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_HOST: rabbitmq-management
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: user
       RABBITMQ_PASSWORD: password
