@@ -1,0 +1,15 @@
+# ignore log 
+/log
+/log/*
+
+# ignore vscode
+.DS_STORE 
+.vscode
+.idea/
+*.exe
+
+# ignore .env 
+.env
+
+# ignore tmp 
+/tmp
