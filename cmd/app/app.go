@@ -24,10 +24,9 @@ type App struct {
 	RedisClient     *redis.Client
 }
 
-// InitializeWatermillRouter initializes a Watermill router with a Zap logger.
 func InitializeWatermillRouter(logger *zap.Logger) (*message.Router, error) {
-	// Use Watermill's Zap logger adapter
-	zapAdapter := watermillzap.NewLogger(logger)
+	// Use the custom ZapLoggerAdapter
+	zapAdapter := NewZapLoggerAdapter(logger)
 
 	// Create the Watermill router
 	router, err := message.NewRouter(message.RouterConfig{}, zapAdapter)
@@ -68,17 +67,17 @@ func NewApp(ctx context.Context) (*App, error) {
 	// Initialize Fiber App
 	fiberApp := fiber.New()
 
+	// Wrap Zap logger with ZapLoggerAdapter
+	watermillLogger := NewZapLoggerAdapter(logger)
+
 	// initialize the watermill router
-	watermillRouter, err := message.NewRouter(message.RouterConfig{}, logger)
+	watermillRouter, err := message.NewRouter(message.RouterConfig{}, watermillLogger)
 	if err != nil {
 		return nil, errors.New("failed to initialize watermill router: " + err.Error())
 	}
 
 	// initialize the otel
-	otelTracer, err := sdktrace.NewTracerProvider(viperConfig.GetString("service_name"))
-	if err != nil {
-		return nil, errors.New("failed to initialize otel: " + err.Error())
-	}
+	otelTracer := sdktrace.NewTracerProvider()
 
 	// Return Initialized App Struct
 	return &App{
@@ -94,17 +93,11 @@ func NewApp(ctx context.Context) (*App, error) {
 
 func (a *App) Serve(ctx context.Context) error {
 	// Run Watermill router on separate goroutine (todo: check if this is necessary)
-	// go func() {
-	fmt.Println("hello guys")
-	fmt.Println("ini nil ga ", a.WatermillRouter)
-	fmt.Println("error ga ", a.WatermillRouter.Run(ctx))
-	if err := a.WatermillRouter.Run(ctx); err != nil {
-		fmt.Println("disini error nya ", err)
-		a.Zap.Fatal("failed to run watermill router", zap.Error(err))
-	}
-	// }()
-
-	fmt.Println("ini apa ", a.FiberApp.Listen(a.ViperConfig.GetString("address")))
+	go func() {
+		if err := a.WatermillRouter.Run(ctx); err != nil {
+			a.Zap.Fatal("failed to run watermill router", zap.Error(err))
+		}
+	}()
 
 	return a.FiberApp.Listen(a.ViperConfig.GetString("address"))
 }
