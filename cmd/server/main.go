@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"main/cmd/app"
 	"os"
@@ -60,7 +59,6 @@ func main() {
 	log.Println("Starting server...")
 
 	err = app.Serve(serveCtx)
-	fmt.Println("error ga ", err)
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
