@@ -20,9 +20,11 @@ go mod tidy
 ## Usage
 Instructions on how to use the project.
 
+make sure you have docker installed on your machine
+
 ```bash
 # Run the project
-go run main.go
+docker-compose -f docker-compose.yaml up
 ```
 
 ## Contributing
