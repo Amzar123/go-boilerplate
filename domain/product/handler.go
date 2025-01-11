@@ -1,22 +1,32 @@
 package product
 
 import (
-	"encoding/json"
-	"net/http"
+	"main/domain/product/feature"
+
+	"github.com/gofiber/fiber/v2"
 )
 
-type Product struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Price int    `json:"price"`
+type ProductHandler interface {
+	GetProductList(c *fiber.Ctx) error
 }
 
-var products = []Product{
-	{ID: 1, Name: "Product 1", Price: 100},
-	{ID: 2, Name: "Product 2", Price: 200},
+type productHandler struct {
+	productFeature feature.ProductFeature
 }
 
-func GetProductList(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(products)
+func NewProductHandler(productFeature feature.ProductFeature) ProductHandler {
+	return &productHandler{
+		productFeature: productFeature,
+	}
+}
+
+func (h productHandler)GetProductList(c *fiber.Ctx) error {
+	products, err := h.productFeature.GetProductList()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(products)
 }

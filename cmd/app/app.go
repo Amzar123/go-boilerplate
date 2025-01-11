@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"main/delivery/container"
+	"main/delivery/http"
 
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/gofiber/fiber/v2"
@@ -66,6 +68,13 @@ func NewApp(ctx context.Context) (*App, error) {
 
 	// Initialize Fiber App
 	fiberApp := fiber.New()
+
+	// Loading repository
+	container := container.SetupContainer()
+
+	// Set up routes
+	handler := http.NewHandler(container)
+	http.RouteGroup(fiberApp, handler)
 
 	// Wrap Zap logger with ZapLoggerAdapter
 	watermillLogger := NewZapLoggerAdapter(logger)

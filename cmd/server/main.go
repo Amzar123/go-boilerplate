@@ -10,15 +10,6 @@ import (
 	"time"
 )
 
-// @title Boilerplate API docs
-// @version 1.0
-// @description This is a boilerplate API server.
-
-// @contact.name API Support
-// @contact.email aji.zapar00@gmail.com
-
-// @host localhost:8080
-// @BasePath /api/v1
 func main() {
 	serveCtx, cancelServeCtx := context.WithCancel(context.Background())
 
